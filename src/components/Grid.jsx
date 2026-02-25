@@ -1,7 +1,14 @@
 import { gridData } from '../data/gridData';
 import Cell from './Cell';
 
-export default function Grid({ highlightedCell, selectedCell, trail, isSpinning }) {
+export default function Grid({
+  highlightedCell,
+  selectedCell,
+  trail,
+  isSpinning,
+  selectedCategories,
+  onCategoryToggle,
+}) {
   return (
     <div className={`grid ${isSpinning ? 'grid--spinning' : ''}`}>
       {gridData.map((row, rowIdx) =>
@@ -10,7 +17,6 @@ export default function Grid({ highlightedCell, selectedCell, trail, isSpinning 
             ? trail.findIndex((t) => t.row === rowIdx && t.col === colIdx)
             : -1;
 
-          // 모서리 셀에 border-radius 부여
           const isTopLeft = rowIdx === 0 && colIdx === 0;
           const isTopRight = rowIdx === 0 && colIdx === 8;
           const isBottomLeft = rowIdx === 8 && colIdx === 0;
@@ -24,6 +30,11 @@ export default function Grid({ highlightedCell, selectedCell, trail, isSpinning 
                 : isBottomRight
                   ? '0 0 6px 0'
                   : undefined;
+
+          // isArrow 셀 = D-day 주변 카테고리 선택 버튼
+          const isCategoryButton = cell.isArrow;
+          const isCategoryActive =
+            isCategoryButton && selectedCategories.includes(cell.category);
 
           return (
             <Cell
@@ -42,6 +53,9 @@ export default function Grid({ highlightedCell, selectedCell, trail, isSpinning 
               trailIndex={trailIndex}
               isSpinning={isSpinning}
               cornerRadius={cornerRadius}
+              isCategoryButton={isCategoryButton}
+              isCategoryActive={isCategoryActive}
+              onCategoryToggle={onCategoryToggle}
             />
           );
         })

@@ -11,8 +11,21 @@ function App() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const animationRef = useRef(null);
   const trailRef = useRef([]);
+
+  const handleCategoryToggle = useCallback(
+    (category) => {
+      if (isSpinning) return;
+      setSelectedCategories((prev) =>
+        prev.includes(category)
+          ? prev.filter((c) => c !== category)
+          : [...prev, category]
+      );
+    },
+    [isSpinning]
+  );
 
   const startRandomSelect = useCallback(() => {
     if (isSpinning) return;
@@ -23,7 +36,12 @@ function App() {
     trailRef.current = [];
     setTrail([]);
 
-    const selectableCells = getSelectableCells();
+    const selectableCells = getSelectableCells(selectedCategories);
+    if (selectableCells.length === 0) {
+      setIsSpinning(false);
+      return;
+    }
+
     const totalSteps = 35 + Math.floor(Math.random() * 15);
     const finalIndex = Math.floor(Math.random() * selectableCells.length);
     let step = 0;
@@ -32,7 +50,6 @@ function App() {
       const idx = (finalIndex + totalSteps - step) % selectableCells.length;
       const cell = selectableCells[idx];
 
-      // 트레일 업데이트
       trailRef.current = [cell, ...trailRef.current].slice(0, TRAIL_LENGTH);
       setTrail([...trailRef.current]);
       setHighlightedCell(cell);
@@ -41,11 +58,9 @@ function App() {
 
       if (step <= totalSteps) {
         const progress = step / totalSteps;
-        // 더 부드러운 감속 커브
         const delay = 40 + 500 * Math.pow(progress, 4);
         animationRef.current = setTimeout(animate, delay);
       } else {
-        // 최종 선택 연출: 짧은 대기 후 결과 표시
         setTimeout(() => {
           const finalCell = selectableCells[finalIndex];
           setHighlightedCell(null);
@@ -54,14 +69,13 @@ function App() {
           setShowConfetti(true);
           setIsSpinning(false);
 
-          // 컨페티 제거
           setTimeout(() => setShowConfetti(false), 2000);
         }, 200);
       }
     };
 
     animate();
-  }, [isSpinning]);
+  }, [isSpinning, selectedCategories]);
 
   return (
     <div className="app">
@@ -72,6 +86,8 @@ function App() {
           selectedCell={selectedCell}
           trail={trail}
           isSpinning={isSpinning}
+          selectedCategories={selectedCategories}
+          onCategoryToggle={handleCategoryToggle}
         />
         {showConfetti && (
           <div className="confetti-container">
@@ -90,6 +106,18 @@ function App() {
           </div>
         )}
       </div>
+      {selectedCategories.length > 0 && (
+        <div className="filter-info">
+          {selectedCategories.length}개 카테고리 선택됨
+          <button
+            className="filter-clear"
+            onClick={() => setSelectedCategories([])}
+            disabled={isSpinning}
+          >
+            초기화
+          </button>
+        </div>
+      )}
       <button
         className={`spin-button ${isSpinning ? 'spin-button--spinning' : ''}`}
         onClick={startRandomSelect}

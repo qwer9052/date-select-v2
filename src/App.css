@@ -81,6 +81,36 @@
   opacity: 0.8;
 }
 
+/* ===== Category Button (D-day 주변 8칸) ===== */
+.cell--category-btn {
+  cursor: pointer;
+  transition:
+    filter 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.cell--category-btn:hover {
+  filter: brightness(1.15);
+}
+
+.cell--category-active {
+  filter: brightness(1.1) saturate(1.5);
+  opacity: 1 !important;
+  font-weight: 900;
+  outline: 3px solid #ff4757;
+  outline-offset: -3px;
+}
+
+.cell--category-active::after {
+  content: '\2714';
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  font-size: 0.55rem;
+  color: #ff4757;
+  line-height: 1;
+}
+
 /* ===== Dimmed (스피닝 중 비활성 셀) ===== */
 .cell--dimmed {
   filter: brightness(0.7) saturate(0.4);
@@ -210,6 +240,37 @@
       rotate(var(--rotation, 360deg))
       scale(0.3);
   }
+}
+
+/* ===== Filter Info ===== */
+.filter-info {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-clear {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  color: #ff4757;
+  background: transparent;
+  border: 1px solid #ff4757;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-clear:hover:not(:disabled) {
+  background: #ff4757;
+  color: #fff;
+}
+
+.filter-clear:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ===== Spin Button ===== */

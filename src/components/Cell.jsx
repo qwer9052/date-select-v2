@@ -1,10 +1,19 @@
 import { CATEGORIES } from '../data/gridData';
 
-export default function Cell({ cell, isHighlighted, isSelected, trailIndex, isSpinning, cornerRadius }) {
+export default function Cell({
+  cell,
+  isHighlighted,
+  isSelected,
+  trailIndex,
+  isSpinning,
+  cornerRadius,
+  isCategoryButton,
+  isCategoryActive,
+  onCategoryToggle,
+}) {
   const cat = CATEGORIES[cell.category];
   const isLabel = cell.isLabel;
   const isDday = cell.category === 'dday';
-  const isArrow = cell.isArrow;
   const isInTrail = trailIndex > 0;
 
   const bgColor = isLabel ? cat.labelColor : cat.color;
@@ -13,16 +22,24 @@ export default function Cell({ cell, isHighlighted, isSelected, trailIndex, isSp
     'cell',
     isLabel && 'cell--label',
     isDday && 'cell--dday',
-    isArrow && 'cell--arrow',
+    cell.isArrow && 'cell--arrow',
     isHighlighted && 'cell--highlighted',
     isInTrail && 'cell--trail',
     isSelected && 'cell--selected',
     isSpinning && !isHighlighted && !isInTrail && 'cell--dimmed',
+    isCategoryButton && 'cell--category-btn',
+    isCategoryActive && 'cell--category-active',
   ]
     .filter(Boolean)
     .join(' ');
 
   const trailOpacity = isInTrail ? 1 - trailIndex * 0.25 : undefined;
+
+  const handleClick = () => {
+    if (isCategoryButton && onCategoryToggle) {
+      onCategoryToggle(cell.category);
+    }
+  };
 
   return (
     <div
@@ -33,6 +50,7 @@ export default function Cell({ cell, isHighlighted, isSelected, trailIndex, isSp
         '--trail-opacity': trailOpacity,
         borderRadius: cornerRadius,
       }}
+      onClick={handleClick}
     >
       <span className="cell__text">
         {cell.text.split('\n').map((line, i) => (

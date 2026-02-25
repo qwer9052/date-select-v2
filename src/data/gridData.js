@@ -126,13 +126,25 @@ export const gridData = [
   ],
 ];
 
+// D-day 주변 8개 카테고리 키 목록
+export const CENTER_CATEGORIES = [
+  'culture', 'activity', 'shopping', 'craft',
+  'food', 'nature', 'home', 'entertainment',
+];
+
 // 선택 가능한 셀만 필터링 (D-day, 카테고리 라벨, 화살표 셀 제외)
-export function getSelectableCells() {
+// selectedCategories가 비어있으면 전체, 있으면 해당 카테고리만
+export function getSelectableCells(selectedCategories = []) {
   const cells = [];
   gridData.forEach((row, rowIdx) => {
     row.forEach((cell, colIdx) => {
       if (!cell.isLabel && !cell.isArrow && cell.category !== 'dday') {
-        cells.push({ ...cell, row: rowIdx, col: colIdx });
+        if (
+          selectedCategories.length === 0 ||
+          selectedCategories.includes(cell.category)
+        ) {
+          cells.push({ ...cell, row: rowIdx, col: colIdx });
+        }
       }
     });
   });
