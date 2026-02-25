@@ -1,10 +1,11 @@
 import { CATEGORIES } from '../data/gridData';
 
-export default function Cell({ cell, isHighlighted, isSelected }) {
+export default function Cell({ cell, isHighlighted, isSelected, trailIndex, isSpinning, cornerRadius }) {
   const cat = CATEGORIES[cell.category];
   const isLabel = cell.isLabel;
   const isDday = cell.category === 'dday';
   const isArrow = cell.isArrow;
+  const isInTrail = trailIndex > 0;
 
   const bgColor = isLabel ? cat.labelColor : cat.color;
 
@@ -14,10 +15,14 @@ export default function Cell({ cell, isHighlighted, isSelected }) {
     isDday && 'cell--dday',
     isArrow && 'cell--arrow',
     isHighlighted && 'cell--highlighted',
+    isInTrail && 'cell--trail',
     isSelected && 'cell--selected',
+    isSpinning && !isHighlighted && !isInTrail && 'cell--dimmed',
   ]
     .filter(Boolean)
     .join(' ');
+
+  const trailOpacity = isInTrail ? 1 - trailIndex * 0.25 : undefined;
 
   return (
     <div
@@ -25,6 +30,8 @@ export default function Cell({ cell, isHighlighted, isSelected }) {
       style={{
         backgroundColor: isDday ? '#333' : bgColor,
         color: isDday ? '#fff' : '#333',
+        '--trail-opacity': trailOpacity,
+        borderRadius: cornerRadius,
       }}
     >
       <span className="cell__text">
