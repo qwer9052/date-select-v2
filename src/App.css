@@ -1,0 +1,210 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* ===== Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 2px;
+  width: 100%;
+  max-width: 650px;
+  background: #ddd;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ===== Cell ===== */
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px;
+  cursor: default;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  line-height: 1.2;
+  user-select: none;
+}
+
+.cell__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+}
+
+.cell--label {
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.cell--dday {
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.cell--arrow {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+/* ===== Highlight Animation (룰렛 순회) ===== */
+.cell--highlighted {
+  transform: scale(1.12);
+  z-index: 10;
+  box-shadow: 0 0 0 3px #ff6b6b, 0 0 16px rgba(255, 107, 107, 0.6);
+  border-radius: 4px;
+  animation: pulse-highlight 0.2s ease-in-out;
+}
+
+@keyframes pulse-highlight {
+  0% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 3px #ff6b6b, 0 0 16px rgba(255, 107, 107, 0.6);
+  }
+}
+
+/* ===== Selected (최종 선택) ===== */
+.cell--selected {
+  transform: scale(1.2);
+  z-index: 20;
+  box-shadow:
+    0 0 0 3px #ff4757,
+    0 0 24px rgba(255, 71, 87, 0.7),
+    0 0 48px rgba(255, 71, 87, 0.3);
+  border-radius: 6px;
+  animation: selected-bounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes selected-bounce {
+  0% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  40% {
+    transform: scale(1.3);
+  }
+  70% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.2);
+    box-shadow:
+      0 0 0 3px #ff4757,
+      0 0 24px rgba(255, 71, 87, 0.7),
+      0 0 48px rgba(255, 71, 87, 0.3);
+  }
+}
+
+/* ===== Spin Button ===== */
+.spin-button {
+  margin-top: 1.5rem;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+  transition: all 0.2s ease;
+}
+
+.spin-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+}
+
+.spin-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.spin-button:disabled {
+  background: linear-gradient(135deg, #aaa, #999);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ===== Result ===== */
+.result {
+  margin-top: 1.2rem;
+  padding: 0.8rem 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  animation: result-fade-in 0.4s ease;
+}
+
+.result__text {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.result__text strong {
+  color: #ff4757;
+  font-size: 1.3rem;
+}
+
+@keyframes result-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .cell {
+    font-size: 0.55rem;
+  }
+  .cell--label {
+    font-size: 0.55rem;
+  }
+  .cell--dday {
+    font-size: 0.65rem;
+  }
+  .title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .cell {
+    font-size: 0.82rem;
+  }
+  .cell--label {
+    font-size: 0.8rem;
+  }
+  .cell--dday {
+    font-size: 1rem;
+  }
+}
