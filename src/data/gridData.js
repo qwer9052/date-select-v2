@@ -95,7 +95,7 @@ export const gridData = [
     { text: '야경', category: 'nature' },
     { text: '청소\n돕기', category: 'home' },
     { text: '낮잠', category: 'home' },
-    { text: '소주\n칵테일', category: 'entertainment' },
+    { text: '소주\n칵테일', category: 'home' },
     { text: '코노', category: 'entertainment' },
     { text: '보드\n게임', category: 'entertainment' },
     { text: '스크린\n야구', category: 'entertainment' },
